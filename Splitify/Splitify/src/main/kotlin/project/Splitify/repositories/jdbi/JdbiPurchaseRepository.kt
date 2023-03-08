@@ -17,5 +17,11 @@ class JdbiPurchaseRepository(
             .bind("user_id", purchase.user_id)
             .bind("trip_id", purchase.trip_id)
             .execute()
+
+        handle
+            .createUpdate("insert into dbo.user_purchase_payed values (:userID,:purchaseID)")
+            .bind("userID", purchase.user_id )
+            .bind("purchaseID", purchase.id )
+            .execute()
     }
 }

@@ -25,7 +25,7 @@ class UserController(
 
         responseHeaders.add(HttpHeaders.SET_COOKIE, ResponseCookie.from(cookieName, cookieValue).build().toString())
 
-        return ResponseEntity.status(201).headers(responseHeaders).body("User Created")
+        return ResponseEntity.status(201).headers(responseHeaders).body("User Created with token ${parts.second} and id ${parts.first}")
 
         }
 

@@ -14,9 +14,9 @@ class TripController(
 ) {
 
     @PostMapping(Uris.Trip.CREATE)
-    fun createTrip(@RequestBody tripCreation: TripCreation, user : User) : ResponseEntity<Int> {
+    fun createTrip(@RequestBody tripCreation: TripCreation, user : User) : ResponseEntity<String> {
         val id = tripServices.createTrip(user.id,tripCreation)
-        return ResponseEntity.status(200).body(id)
+        return ResponseEntity.status(200).body("Trip added with the id $id")
     }
 
 }

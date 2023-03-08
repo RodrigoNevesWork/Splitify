@@ -14,5 +14,9 @@ object Uris {
 
     }
 
+    object Purchase{
+        const val CREATE = "/{trip_id}/purchases"
+    }
+
 
 }
