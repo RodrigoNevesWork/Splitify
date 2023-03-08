@@ -2,32 +2,26 @@ package project.Splitify.http.pipeline
 
 
 import org.springframework.stereotype.Component
+import project.Splitify.domain.Token
 import project.Splitify.domain.User
 import project.Splitify.services.UserServices
 import java.util.*
+import javax.servlet.http.Cookie
 
 @Component
 class AuthorizationHeaderProcessor(
     val userServices: UserServices,
 ) {
 
-    fun process(credentials : String?) : User?{
-        if(credentials == null) return null
+    fun process(cookie : Cookie?) : User?{
+        if(cookie == null) return null
 
-        val parts = credentials.trim().split(" ")
+        val value = cookie.value
 
-        if(parts.size != 2 || parts[0].lowercase() != SCHEMA) return null
-
-        return userServices.getUserByToken(parts[1])
+        return userServices.getUserByToken(Token(value))
     }
     companion object{
         const val SCHEMA = "bearer"
     }
-
-
-
-
-
-
 
 }

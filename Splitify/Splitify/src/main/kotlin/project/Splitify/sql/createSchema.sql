@@ -2,10 +2,10 @@ create schema if not exists dbo;
 
 create table if not exists dbo.User(
     id serial primary key,
-    password text,
     name text,
     email text,
     phone text,
+    password text,
     token text
 );
 
