@@ -2,8 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
-      <module name="Splitify.Splitify.main~1" target="17" />
-      <module name="Splitify.Splitify.test~1" target="17" />
+      <module name="Splitify.Splitify.main" target="17" />
+      <module name="Splitify.Splitify.test" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>

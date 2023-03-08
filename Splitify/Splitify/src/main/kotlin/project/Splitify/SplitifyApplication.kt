@@ -9,15 +9,15 @@ import project.Splitify.repositories.jdbi.configure
 
 @SpringBootApplication
 class SplitifyApplication {
+
 	@Bean
 	fun jdbi(): Jdbi = Jdbi.create(
 		PGSimpleDataSource().apply {
-			setURL(System.getenv("DATABASE_DAW"))
+			setURL(System.getenv("postgresql_database"))
 		}
 
 	).configure()
 }
-
 
 fun main(args: Array<String>) {
 	runApplication<SplitifyApplication>(*args)

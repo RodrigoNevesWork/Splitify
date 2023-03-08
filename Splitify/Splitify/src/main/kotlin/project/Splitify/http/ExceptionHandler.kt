@@ -15,11 +15,13 @@ private fun Exception.toProblemJson() : ProblemJson = when(this){
     is NotInThisTrip -> ProblemJson("You are not in this trip", 401)
     is Unauthorized -> ProblemJson("Unauthorized", 401)
     is WeakPassword -> ProblemJson("Weak Password", 401)
-    else -> ProblemJson("Internal Error", 500)
+    is BadEmail -> ProblemJson("Email does not Exists", 401)
+    is BadPhone -> ProblemJson("This Phone does not Exists", 401)
+    else -> ProblemJson(this.message ?: "Internal Error", 500)
 }
 
 
-private fun Exception.toResponseProblem() : ResponseEntity<*> {
+private fun Exception.toResponseProblem() : ResponseEntity<String> {
     val response = this.toProblemJson()
     return ResponseEntity.status(response.code).body(response.message)
 

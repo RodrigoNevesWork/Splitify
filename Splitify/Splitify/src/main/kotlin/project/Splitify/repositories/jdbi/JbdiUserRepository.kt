@@ -2,22 +2,19 @@ package project.Splitify.repositories.jdbi
 
 import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.kotlin.mapTo
-import project.Splitify.domain.Purchase
-import project.Splitify.domain.Token
-import project.Splitify.domain.User
-import project.Splitify.domain.UserCreation
+import project.Splitify.domain.*
 import project.Splitify.repositories.UserRepository
 import java.util.*
 
 class JbdiUserRepository(
     private val handle : Handle
 ) : UserRepository{
-    override fun getUserByToken(token: String): User {
+    override fun getUserByToken(token: String): User? {
         return handle
                 .createQuery("select * from dbo.user where token = :token")
                 .bind("token", token)
                 .mapTo<User>()
-                .single()
+                .singleOrNull()
     }
 
     override fun checkIfEmailExists(email: String): Boolean {
@@ -51,12 +48,12 @@ class JbdiUserRepository(
 
     }
 
-    override fun readUser(userID: Int): User {
+    override fun getUser(userID: Int): UserOutput? {
        return handle
-              .createQuery("select * from dbo.user where id = :userID")
+              .createQuery("select id,name,email,phone from dbo.user where id = :userID")
               .bind("userID",userID)
-              .mapTo<User>()
-              .single()
+              .mapTo<UserOutput>()
+              .singleOrNull()
     }
 
     override fun updateUser(userID: Int, userCreation: UserCreation) {
@@ -89,6 +86,14 @@ class JbdiUserRepository(
             .bind("tripID", tripID)
             .mapTo<Int>()
             .single() == 1
+    }
+
+    override fun getUserByEmail(email: String): UserOutput? {
+        return handle
+               .createQuery("select id,name,email,phone from dbo.user where email = :email ")
+               .bind("email", email)
+               .mapTo<UserOutput>()
+               .singleOrNull()
     }
 
 

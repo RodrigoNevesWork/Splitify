@@ -15,6 +15,12 @@ class Unauthorized : DomainException()
 
 class WeakPassword : DomainException()
 
+class UserNotExists : DomainException()
+
+class BadEmail : DomainException()
+
+class BadPhone : DomainException()
+
 
 
 

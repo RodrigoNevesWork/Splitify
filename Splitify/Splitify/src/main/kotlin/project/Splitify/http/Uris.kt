@@ -4,6 +4,7 @@ object Uris {
 
     object User{
         const val SIGNUP = "/users"
+        const val BY_EMAIL = "user/{user_email}"
     }
 
     object Trip{

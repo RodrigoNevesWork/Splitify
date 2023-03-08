@@ -21,11 +21,6 @@ class TripServices(
             it.tripRepository.getTrip(tripID) ?: throw TripNotExists()
         }
 
-
-
-
-
-
     }
 
 
