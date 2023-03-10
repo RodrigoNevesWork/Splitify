@@ -3,6 +3,7 @@ package project.splitify.http.jwt
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import org.springframework.stereotype.Component
+import project.splitify.domain.JWToken
 import javax.crypto.spec.SecretKeySpec
 
 @Component
@@ -29,12 +30,14 @@ class JwtUtils(jwtConfiguration: JwtConfiguration) {
         }
     }
 
-    fun createAccessToken(jwtPayload: JwtPayload): String {
+    fun createAccessToken(jwtPayload: JwtPayload): JWToken {
 
-        return Jwts.builder()
-            .setClaims(jwtPayload.claims)
-            .signWith(acessTokenKey)
-            .compact()
+        return JWToken(
+             token =   Jwts.builder()
+                       .setClaims(jwtPayload.claims)
+                       .signWith(acessTokenKey)
+                       .compact()
+        )
     }
 
 
