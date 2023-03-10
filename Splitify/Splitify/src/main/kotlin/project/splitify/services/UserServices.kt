@@ -35,9 +35,9 @@ class UserServices(
         if(phoneExists(phone)) throw PhoneAlreadyInUse()
     }
 
-    fun getUserByToken(token : Token) : User?{
+    fun getUserByToken(JWToken : JWToken) : User?{
         return transactionManager.run {
-            val hashedToken = utils.encrypt(token.token)
+            val hashedToken = utils.encrypt(JWToken.token)
             it.userRepository.getUserByToken(hashedToken)
         }
     }
@@ -50,21 +50,21 @@ class UserServices(
         }
     }
 
-    fun createUser(userCreation : UserCreation) : Pair<Int, String> {
+    fun createUser(userCreation : UserCreation) : Pair<Int, JWToken> {
 
         checkDetails(userCreation.email, userCreation.phone, userCreation.password)
 
         val jwtPayload = JwtUtils.JwtPayload.createJwtPayload(userCreation.phone)
 
-        val token = jwtUtils.createAccessToken(jwtPayload)
+        val accesToken = jwtUtils.createAccessToken(jwtPayload)
 
         val userEncrypted = utils.encryptUserCreation(userCreation)
 
-        val encryptedToken = utils.encrypt(token)
+        val encryptedToken = utils.encrypt(accesToken.token)
 
         val id = transactionManager.run { it.userRepository.createUser(encryptedToken, userEncrypted) }
 
-        return Pair(id,token)
+        return Pair(id,accesToken)
     }
 
     fun getUser(userId : Int) : UserOutput? {

@@ -2,7 +2,7 @@ package project.splitify.http.pipeline
 
 
 import org.springframework.stereotype.Component
-import project.splitify.domain.Token
+import project.splitify.domain.JWToken
 import project.splitify.domain.User
 import project.splitify.services.UserServices
 import javax.servlet.http.Cookie
@@ -17,7 +17,7 @@ class AuthorizationHeaderProcessor(
 
         val value = cookie.value
 
-        return userServices.getUserByToken(Token(value))
+        return userServices.getUserByToken(JWToken(value))
     }
     companion object{
         const val SCHEMA = "bearer"

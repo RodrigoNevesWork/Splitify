@@ -28,7 +28,6 @@ class AuthenticationInterceptor(
                 UserArgumentResolver.addUserTo(user,request)
                 true
             }
-
         }
         return true
     }
