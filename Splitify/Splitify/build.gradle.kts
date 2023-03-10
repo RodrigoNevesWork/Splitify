@@ -16,12 +16,21 @@ repositories {
 }
 
 dependencies {
+
+	implementation ("javax.validation:validation-api:2.0.1.Final")
+	implementation ("org.hibernate.validator:hibernate-validator:6.0.13.Final")
+
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("org.springframework.security:spring-security-core:5.7.3")
+
+	//for JWT implementation
+	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+	implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
+	implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
 	// for JDBI
 	implementation("org.jdbi:jdbi3-core:3.33.0")
