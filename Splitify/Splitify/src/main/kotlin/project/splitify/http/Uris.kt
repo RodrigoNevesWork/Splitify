@@ -11,7 +11,7 @@ object Uris {
 
     object Trip{
         const val CREATE = "/trips"
-        const val TRIP_BY_ID = "/trip/{id}"
+        const val TRIP_BY_ID = "/trip/{trip_id}"
         const val USER_IN_TRIP = "/trip/{trip_id}/user/{user_ID}"
 
     }

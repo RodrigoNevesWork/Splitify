@@ -13,8 +13,9 @@ class TripServices(
             it.tripRepository.create(userID,tripCreation)
         }
 
-    fun getTrip(tripID : Int) : TripPurchases =
+    fun getTrip(tripID : Int, userID : Int) : TripPurchases =
         transactionManager.run {
+            if(!it.userRepository.checkIfIsInTrip(userID, tripID)) throw NotInThisTrip()
             it.tripRepository.getTrip(tripID) ?: throw TripNotExists()
         }
 
@@ -25,8 +26,9 @@ class TripServices(
 
             if(it.userRepository.checkIfIsInTrip(userIDToBeAdded,tripID)) throw AlreadyInThisTrip()
 
-           it.tripRepository.addUserToTrip(userIDToBeAdded, tripID)
+            it.tripRepository.addUserToTrip(userIDToBeAdded, tripID)
         }
+
 }
 
 
