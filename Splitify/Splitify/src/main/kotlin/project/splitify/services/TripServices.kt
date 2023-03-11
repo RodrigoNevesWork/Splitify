@@ -1,9 +1,7 @@
 package project.splitify.services
 
 import org.springframework.stereotype.Component
-import project.splitify.domain.TripCreation
-import project.splitify.domain.TripNotExists
-import project.splitify.domain.TripPurchases
+import project.splitify.domain.*
 import project.splitify.repositories.TransactionManager
 
 @Component
@@ -20,6 +18,15 @@ class TripServices(
             it.tripRepository.getTrip(tripID) ?: throw TripNotExists()
         }
 
-    }
+    fun addUserToTrip(userIDToBeAdded: Int, tripID: Int, userID: Int) =
+        transactionManager.run {
+
+            if(!it.userRepository.checkIfIsInTrip(userID,tripID)) throw NotInThisTrip()
+
+            if(it.userRepository.checkIfIsInTrip(userIDToBeAdded,tripID)) throw AlreadyInThisTrip()
+
+           it.tripRepository.addUserToTrip(userIDToBeAdded, tripID)
+        }
+}
 
 

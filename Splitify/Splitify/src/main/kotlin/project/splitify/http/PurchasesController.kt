@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import project.splitify.domain.PurchaseCreation
 import project.splitify.domain.User
+import project.splitify.http.pipeline.Authentication
 import project.splitify.services.PurchaseServices
 
+@Authentication
 @RestController
 class PurchasesController(
     private val purchaseServices: PurchaseServices

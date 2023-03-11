@@ -3,7 +3,6 @@ package project.splitify.http.pipeline
 import org.springframework.stereotype.Component
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
-import project.splitify.domain.User
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -13,8 +12,12 @@ class AuthenticationInterceptor(
 )  : HandlerInterceptor{
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean{
-        if(handler is HandlerMethod && handler.methodParameters.any{ it.parameterType == User::class.java }){
-
+        if(
+            (handler is HandlerMethod) &&
+            (
+            handler.hasMethodAnnotation(Authentication::class.java) || handler.method.declaringClass.isAnnotationPresent(Authentication::class.java)
+            )
+        ){
             val cookies = request.cookies
             val tokenCookie = cookies.find { it.name == "token" }
 

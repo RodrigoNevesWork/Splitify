@@ -14,5 +14,6 @@ interface UserRepository {
     fun getPurchasesFromTrip(userID : Int, tripID : Int) : List<Purchase>
     fun checkIfIsInTrip(userID : Int, tripID: Int) : Boolean
     fun getUserByEmail(email: String) : UserOutput?
+    fun getTripsOfUser(userID : Int) : Trips
 
 }

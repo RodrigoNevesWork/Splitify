@@ -44,6 +44,13 @@ class JdbiTripRepository(
         return TripPurchases(trip, purchases)
     }
 
+    override fun addUserToTrip(userID: Int, tripID: Int) {
+        handle
+            .createUpdate("insert into dbo.user_trip(user_id, trip_id) values (:userID, :tripID)")
+            .bind("userID", userID)
+            .bind("tripID", tripID)
+            .execute()
+    }
 
 
 }

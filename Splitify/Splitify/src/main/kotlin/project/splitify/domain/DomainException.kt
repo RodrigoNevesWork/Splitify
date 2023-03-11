@@ -11,6 +11,8 @@ class TripNotExists : DomainException()
 
 class NotInThisTrip : DomainException()
 
+class AlreadyInThisTrip : DomainException()
+
 class Unauthorized : DomainException()
 
 class WeakPassword : DomainException()

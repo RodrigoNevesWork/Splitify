@@ -74,6 +74,12 @@ class UserServices(
         }
     }
 
+    fun getTripsOfUser(userID: Int) : Trips{
+        return transactionManager.run {
+            it.userRepository.getTripsOfUser(userID)
+        }
+    }
+
 }
 
 

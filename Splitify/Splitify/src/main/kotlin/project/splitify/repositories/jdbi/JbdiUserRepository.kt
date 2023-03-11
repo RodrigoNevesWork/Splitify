@@ -95,5 +95,15 @@ class JbdiUserRepository(
                .singleOrNull()
     }
 
+    override fun getTripsOfUser(userID: Int): Trips {
+        return Trips(
+            handle
+                .createQuery("select t.id, t.location from dbo.trip t inner join dbo.user_trip ut on t.id = ut.trip_id where ut.user_id = :userID ")
+                .bind("userID",userID)
+                .mapTo<Trip>()
+                .toList()
+        )
+    }
+
 
 }
