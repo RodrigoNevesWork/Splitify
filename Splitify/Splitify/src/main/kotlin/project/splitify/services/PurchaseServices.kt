@@ -1,10 +1,7 @@
 package project.splitify.services
 
 import org.springframework.stereotype.Component
-import project.splitify.domain.NotInThisTrip
-import project.splitify.domain.Purchase
-import project.splitify.domain.PurchaseCreation
-import project.splitify.domain.TripNotExists
+import project.splitify.domain.*
 import project.splitify.repositories.TransactionManager
 import java.util.*
 
@@ -35,6 +32,18 @@ class PurchaseServices(
              id
         }
 
+    }
+
+    fun payPurchase(purchaseID : UUID, userID: Int, payingUser : Int){
+        transactionManager.run {
+
+            if(!it.purchaseRepository.checkBuyer(purchaseID,userID)) throw NotBuyer()
+            if(it.purchaseRepository.checkIfHasAlreadyPayed(purchaseID,payingUser)) throw AlreadyPayed()
+
+            it.purchaseRepository.payPurchase(purchaseID,payingUser)
+
+
+        }
     }
 
 

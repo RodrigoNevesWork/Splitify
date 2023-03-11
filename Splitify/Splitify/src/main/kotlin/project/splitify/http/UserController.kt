@@ -36,14 +36,14 @@ class UserController(
     @GetMapping(Uris.User.BY_EMAIL)
     fun getUserByEmail(@PathVariable user_email: String) : ResponseEntity<UserOutput>{
         val user = userServices.getUserByEmail(user_email)
-        return ResponseEntity.status(200).body(user)
+        return ResponseEntity.ok(user)
     }
 
     @Authentication
     @GetMapping(Uris.User.TRIPS)
     fun getTripsOfUser(user : User) : ResponseEntity<Trips>{
         val trips = userServices.getTripsOfUser(user.id)
-        return ResponseEntity.status(200).body(trips)
+        return ResponseEntity.ok(trips)
     }
 
 

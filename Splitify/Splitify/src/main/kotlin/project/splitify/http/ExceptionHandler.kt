@@ -18,6 +18,8 @@ private fun Exception.toProblemJson() : ProblemJson = when(this){
     is BadEmail -> ProblemJson("Email does not Exists", 401)
     is BadPhone -> ProblemJson("This Phone does not Exists", 401)
     is AlreadyInThisTrip -> ProblemJson("User Already in this trip", 401)
+    is NotBuyer -> ProblemJson("You are note the buyer of this Purchase", 401)
+    is AlreadyPayed -> ProblemJson("You already payed this Purchase", 401)
     else -> ProblemJson(this.message ?: "Internal Error", 500)
 }
 

@@ -1,8 +1,10 @@
 package project.splitify.repositories.jdbi
 
 import org.jdbi.v3.core.Handle
+import org.jdbi.v3.core.kotlin.mapTo
 import project.splitify.domain.Purchase
 import project.splitify.repositories.PurchaseRepository
+import java.util.*
 
 class JdbiPurchaseRepository(
     private val handle : Handle
@@ -23,5 +25,33 @@ class JdbiPurchaseRepository(
             .bind("userID", purchase.user_id )
             .bind("purchaseID", purchase.id )
             .execute()
+    }
+
+    override fun checkBuyer(purchaseID: UUID, userID: Int) : Boolean {
+       return handle
+            .createQuery("select count(*) from dbo.purchase where id = :purchaseID and user_id = :userID")
+            .bind("purchaseID",purchaseID)
+            .bind("userID",userID)
+            .mapTo<Int>()
+            .single() == 1
+
+    }
+
+    override fun checkIfHasAlreadyPayed(purchaseID: UUID, userID: Int) : Boolean{
+        return handle
+            .createQuery("select count(*) from dbo.user_purchase_payed where purchase_id = :purchaseID and user_id = :userID")
+            .bind("purchaseID",purchaseID)
+            .bind("userID",userID)
+            .mapTo<Int>()
+            .single() == 1
+    }
+
+    override fun payPurchase(purchaseID: UUID, payingUser: Int) {
+         handle
+            .createUpdate("insert into dbo.user_purchase_payed values(:userID,:purchaseID)")
+            .bind("userID", payingUser)
+            .bind("purchaseID", purchaseID)
+            .execute()
+
     }
 }

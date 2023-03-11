@@ -18,6 +18,7 @@ object Uris {
 
     object Purchase{
         const val CREATE = "/{trip_id}/purchases"
+        const val PURCHASE = "/purchase/{purchase_id}"
     }
 
 

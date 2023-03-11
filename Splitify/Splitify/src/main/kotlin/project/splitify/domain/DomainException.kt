@@ -23,6 +23,12 @@ class BadEmail : DomainException()
 
 class BadPhone : DomainException()
 
+class NotBuyer : DomainException()
+
+class AlreadyPayed : DomainException()
+
+
+
 
 
 

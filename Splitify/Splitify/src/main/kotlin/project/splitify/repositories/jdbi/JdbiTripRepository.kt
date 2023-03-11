@@ -26,9 +26,6 @@ class JdbiTripRepository(
             return id
             }
 
-
-
-
     override fun getTrip(tripID : Int) : TripPurchases?{
              val trip = handle
                         .createQuery("select * from dbo.trip where id = :tripID")
