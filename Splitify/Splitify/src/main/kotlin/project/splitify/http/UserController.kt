@@ -1,6 +1,5 @@
 package project.splitify.http
 
-import org.apache.coyote.Response
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseCookie
 import org.springframework.http.ResponseEntity
@@ -18,7 +17,7 @@ class UserController(
     private val userServices : UserServices,
 ) {
 
-    @PostMapping(Uris.User.SIGNUP)
+    @PostMapping(Uris.Users.SIGNUP)
     fun createUser(@RequestBody userCreation: UserCreation) : ResponseEntity<String> {
         val parts = userServices.createUser(userCreation)
         val responseHeaders = HttpHeaders()
@@ -33,18 +32,20 @@ class UserController(
         }
 
     @Authentication
-    @GetMapping(Uris.User.BY_EMAIL)
+    @GetMapping(Uris.Users.BY_EMAIL)
     fun getUserByEmail(@PathVariable user_email: String) : ResponseEntity<UserOutput>{
         val user = userServices.getUserByEmail(user_email)
         return ResponseEntity.ok(user)
     }
 
     @Authentication
-    @GetMapping(Uris.User.TRIPS)
+    @GetMapping(Uris.Users.TRIPS)
     fun getTripsOfUser(user : User) : ResponseEntity<Trips>{
         val trips = userServices.getTripsOfUser(user.id)
         return ResponseEntity.ok(trips)
     }
+
+
 
 
 

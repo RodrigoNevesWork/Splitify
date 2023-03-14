@@ -18,13 +18,13 @@ class PurchasesController(
     private val purchaseServices: PurchaseServices
 ) {
 
-    @PostMapping(Uris.Purchase.CREATE)
+    @PostMapping(Uris.Purchases.CREATE)
     fun createPurchase(@PathVariable trip_id : Int, user : User, @RequestBody purchaseCreation : PurchaseCreation) : ResponseEntity<String>{
         val id = purchaseServices.createPurchase(purchaseCreation, user.id,trip_id)
         return ResponseEntity.ok("Purchase Created with id -> $id")
     }
 
-    @PostMapping(Uris.Purchase.PURCHASE)
+    @PostMapping(Uris.Purchases.PURCHASE)
     fun payPurchase(@PathVariable purchase_id : UUID, user: User, @RequestBody payingUser : UserInput) : ResponseEntity<String>{
         purchaseServices.payPurchase(purchase_id,user.id, payingUser.id)
         return ResponseEntity.ok("Purchase Payed")

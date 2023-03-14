@@ -15,10 +15,10 @@ private fun Exception.toProblemJson() : ProblemJson = when(this){
     is NotInThisTrip -> ProblemJson("You are not in this trip", 401)
     is Unauthorized -> ProblemJson("Unauthorized", 401)
     is WeakPassword -> ProblemJson("Weak Password", 401)
-    is BadEmail -> ProblemJson("Email does not Exists", 401)
-    is BadPhone -> ProblemJson("This Phone does not Exists", 401)
+    is BadEmail -> ProblemJson("Email does not Exists", 404)
+    is BadPhone -> ProblemJson("This Phone does not Exists", 404)
     is AlreadyInThisTrip -> ProblemJson("User Already in this trip", 401)
-    is NotBuyer -> ProblemJson("You are note the buyer of this Purchase", 401)
+    is NotBuyer -> ProblemJson("You are not the buyer of this Purchase", 401)
     is AlreadyPayed -> ProblemJson("You already payed this Purchase", 401)
     else -> ProblemJson(this.message ?: "Internal Error", 500)
 }
@@ -33,5 +33,5 @@ private fun Exception.toResponseProblem() : ResponseEntity<String> {
 @ControllerAdvice
 class ExceptionHandler : ResponseEntityExceptionHandler() {
     @ExceptionHandler(value = [Exception::class])
-    protected fun handleConflict( error : Exception) = error.toResponseProblem()
+    protected fun handleConflict(error : Exception) : ResponseEntity<String> = error.toResponseProblem()
 }
