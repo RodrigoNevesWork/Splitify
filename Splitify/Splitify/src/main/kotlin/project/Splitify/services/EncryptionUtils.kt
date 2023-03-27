@@ -8,7 +8,7 @@ import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 
 @Component
-class Utils {
+class EncryptionUtils {
 
     private val SECRET_KEY = System.getenv("SECRET_KEY")
 
@@ -49,10 +49,5 @@ class Utils {
         )
     }
 
-
-    fun isPasswordSafe(password : String) : Boolean{
-        val regex = Regex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}\$")
-        return regex.matches(password)
-    }
 
 }

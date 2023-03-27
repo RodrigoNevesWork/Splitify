@@ -1,10 +1,10 @@
 package project.splitify.services
 
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 import project.splitify.domain.*
 import project.splitify.repositories.TransactionManager
 
-@Component
+@Service
 class TripServices(
     private val transactionManager : TransactionManager
 ){
@@ -15,16 +15,18 @@ class TripServices(
 
     fun getTrip(tripID : Int, userID : Int) : TripPurchases =
         transactionManager.run {
-            if(!it.userRepository.checkIfIsInTrip(userID, tripID)) throw NotInThisTrip()
+            if(!it.userRepository.isInTrip(userID, tripID)) throw NotInThisTrip()
             it.tripRepository.getTrip(tripID) ?: throw TripNotExists()
         }
 
     fun addUserToTrip(userIDToBeAdded: Int, tripID: Int, userID: Int) =
         transactionManager.run {
 
-            if(!it.userRepository.checkIfIsInTrip(userID,tripID)) throw NotInThisTrip()
+            if(!it.friendsManagementRepository.areFriends(userIDToBeAdded, userID)) throw NotFriends()
 
-            if(it.userRepository.checkIfIsInTrip(userIDToBeAdded,tripID)) throw AlreadyInThisTrip()
+            if(!it.userRepository.isInTrip(userID,tripID)) throw NotInThisTrip()
+
+            if(it.userRepository.isInTrip(userIDToBeAdded,tripID)) throw AlreadyInThisTrip()
 
             it.tripRepository.addUserToTrip(userIDToBeAdded, tripID)
         }

@@ -4,6 +4,8 @@ import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.kotlin.mapTo
 import project.splitify.domain.*
 import project.splitify.repositories.UserRepository
+import project.splitify.repositories.jdbi.mappers.DebtMapper
+import project.splitify.repositories.jdbi.mappers.DebtorMapper
 
 class JbdiUserRepository(
     private val handle : Handle
@@ -78,7 +80,7 @@ class JbdiUserRepository(
             .mapTo<Purchase>()
             .toList()
 
-    override fun checkIfIsInTrip(userID: Int, tripID: Int): Boolean {
+    override fun isInTrip(userID: Int, tripID: Int): Boolean {
         return handle
             .createQuery("select count(*) from dbo.user_trip where user_id = :userID and trip_id = :tripID")
             .bind("userID", userID)
@@ -87,12 +89,14 @@ class JbdiUserRepository(
             .single() == 1
     }
 
-    override fun getUserByEmail(email: String): UserOutput? {
-        return handle
-               .createQuery("select id,name,email,phone from dbo.user where email = :email ")
-               .bind("email", email)
+    override fun getUsers(name: String): ListOfUsers {
+        return ListOfUsers(
+            handle
+               .createQuery("select id,name,email,phone from dbo.user where name = :name ")
+               .bind("name", name)
                .mapTo<UserOutput>()
-               .singleOrNull()
+               .toList()
+        )
     }
 
     override fun getTripsOfUser(userID: Int): Trips {
@@ -105,5 +109,75 @@ class JbdiUserRepository(
         )
     }
 
+
+    override fun getDebtsOfUserInTrip(userID: Int, tripID : Int): List<Debt> {
+        val query = "WITH purchase_total_people AS (\n" +
+                "    SELECT p.id AS purchase_id, p.price, p.trip_id, COUNT(ut.user_id) AS total_people\n" +
+                "    FROM dbo.Purchase p\n" +
+                "    JOIN dbo.User_Trip ut ON p.trip_id = ut.trip_id\n" +
+                "    WHERE p.trip_id = :tripID\n" +
+                "    GROUP BY p.id, p.price, p.trip_id\n" +
+                "),\n" +
+                "debts AS (\n" +
+                "    SELECT p.id AS purchase_id, p.user_id AS buyer_id, p.price / pt.total_people AS debt_amount, p.description, p.trip_id\n" +
+                "    FROM dbo.Purchase p\n" +
+                "    JOIN purchase_total_people pt ON p.id = pt.purchase_id\n" +
+                ")\n" +
+                "SELECT p.id, p.price, p.description, p.trip_id, p.user_id, d.debt_amount AS debt\n" +
+                "FROM debts d\n" +
+                "JOIN dbo.Purchase p ON d.purchase_id = p.id\n" +
+                "WHERE d.buyer_id != :userID AND NOT EXISTS (\n" +
+                "    SELECT :userID\n" +
+                "    FROM dbo.User_Purchase_Payed upp\n" +
+                "    WHERE upp.user_id = :userID AND upp.purchase_id = d.purchase_id\n" +
+                ");\n"
+
+        return handle.createQuery(query)
+                     .bind("tripID",tripID)
+                     .bind("userID",userID)
+                     .map(DebtMapper())
+                     .toList()
+    }
+
+    override fun getDebtorsInTrip(userID: Int, tripID: Int): List<Debtor> {
+        val query =
+            "WITH user_purchase AS (\n" +
+                "    SELECT p.id, p.price, p.description, p.trip_id, p.user_id\n" +
+                "    FROM dbo.Purchase p\n" +
+                "    WHERE p.user_id = :user_id AND p.trip_id = :trip_id\n" +
+                "),\n" +
+                "total_users_in_trip AS (\n" +
+                "    SELECT COUNT(*) AS total_users\n" +
+                "    FROM dbo.User_Trip ut\n" +
+                "    WHERE ut.trip_id = :trip_id\n" +
+                "),\n" +
+                "debts AS (\n" +
+                "    SELECT up.id AS purchase_id, up.price, up.description, up.trip_id, up.user_id,\n" +
+                "        ut.user_id AS debtor_id, (up.price / tt.total_users) AS debt\n" +
+                "    FROM user_purchase up\n" +
+                "    JOIN dbo.User_Trip ut ON ut.trip_id = up.trip_id\n" +
+                "    CROSS JOIN total_users_in_trip tt\n" +
+                "    WHERE up.user_id != ut.user_id\n" +
+                "),\n" +
+                "debts_with_paid_status AS (\n" +
+                "    SELECT d.*, upp.user_id AS paid_id\n" +
+                "    FROM debts d\n" +
+                "    LEFT JOIN dbo.user_purchase_payed upp ON d.debtor_id = upp.user_id AND d.purchase_id = upp.purchase_id\n" +
+                "    WHERE upp.purchase_id IS NULL OR upp.purchase_id = d.purchase_id\n" +
+                ")\n" +
+                "\n" +
+                "SELECT u.id, u.name, u.email, u.phone, d.debt\n" +
+                "FROM dbo.User u\n" +
+                "JOIN debts_with_paid_status d ON u.id = d.debtor_id\n" +
+                "WHERE d.paid_id IS NULL;\n"
+
+
+
+        return handle.createQuery(query)
+                     .bind("user_id",userID)
+                     .bind("trip_id",tripID)
+                     .map(DebtorMapper())
+                     .toList()
+    }
 
 }

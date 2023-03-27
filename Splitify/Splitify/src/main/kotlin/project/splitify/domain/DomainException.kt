@@ -1,31 +1,49 @@
 package project.splitify.domain
 
 
-abstract class DomainException : Exception()
 
-class EmailAlreadyInUse : DomainException()
+abstract class BadRequest(msg : String) : Exception(msg)
 
-class PhoneAlreadyInUse : DomainException()
+abstract class NotFound(msg : String) : Exception(msg)
 
-class TripNotExists : DomainException()
+abstract class UnauthorizedRequest(msg : String) : Exception(msg)
 
-class NotInThisTrip : DomainException()
+abstract class Forbidden(msg : String) : Exception(msg)
 
-class AlreadyInThisTrip : DomainException()
+class FriendYourself : BadRequest("Can't be friends with yourself")
 
-class Unauthorized : DomainException()
+class EmailAlreadyInUse : BadRequest("Email already in Use")
 
-class WeakPassword : DomainException()
+class PhoneAlreadyInUse : BadRequest("Phone number already in use")
 
-class UserNotExists : DomainException()
+class TripNotExists : NotFound("This trip does not exists")
 
-class BadEmail : DomainException()
+class NotInThisTrip : Forbidden("User not is this trip")
 
-class BadPhone : DomainException()
+class NotFriends : Forbidden("Users Not Friends")
 
-class NotBuyer : DomainException()
+class AlreadyFriends : BadRequest("Already Friends with this User")
 
-class AlreadyPayed : DomainException()
+class AlreadyInThisTrip : BadRequest("User already in this trip")
+
+class Unauthorized : UnauthorizedRequest("Unauthorized")
+
+class WeakPassword : BadRequest("Password too weak")
+
+class UserNotExists : NotFound("User does Not exists")
+
+class BadEmail : BadRequest("Bad Email")
+
+class BadPhone : BadRequest("Bad Phone")
+
+class NotBuyer : UnauthorizedRequest("Not the buyer of this Purchase")
+
+class AlreadyPayed : BadRequest("Alreday Payed this Purchase")
+
+class PurchaseNotExists : NotFound("This Purchase does not exists")
+
+class PurchaseNotInATripOfUser : Forbidden("Purchase not in a trip of User")
+
 
 
 

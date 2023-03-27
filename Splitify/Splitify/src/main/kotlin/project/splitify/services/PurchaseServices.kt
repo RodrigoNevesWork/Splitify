@@ -1,23 +1,23 @@
 package project.splitify.services
 
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 import project.splitify.domain.*
 import project.splitify.repositories.TransactionManager
 import java.util.*
 
-@Component
+@Service
 class PurchaseServices(
     private val transactionManager : TransactionManager
 ) {
 
-    fun createPurchase(purchaseCreation: PurchaseCreation, userID : Int, tripID : Int) : UUID{
+    fun createPurchase(purchaseCreation: PurchaseCreation, userID : Int, tripID : Int) : String{
         return transactionManager.run {
 
-         it.tripRepository.getTrip(tripID) ?: throw TripNotExists()
+        if(!it.userRepository.isInTrip(userID,tripID)) throw NotInThisTrip()
 
-        if(!it.userRepository.checkIfIsInTrip(userID,tripID)) throw NotInThisTrip()
+        it.tripRepository.getTrip(tripID) ?: throw TripNotExists()
 
-        val id = UUID.randomUUID()
+        val id = UUID.randomUUID().toString()
 
             it.purchaseRepository.addPurchase(
                 Purchase(
@@ -34,15 +34,27 @@ class PurchaseServices(
 
     }
 
-    fun payPurchase(purchaseID : UUID, userID: Int, payingUser : Int){
+    fun payPurchase(purchaseID : String, userID: Int, payingUser : Int, tripID : Int){
         transactionManager.run {
 
+            if(!it.userRepository.isInTrip(userID, tripID)) throw NotInThisTrip()
+            if(!it.friendsManagementRepository.areFriends(userID, payingUser)) throw NotFriends()
             if(!it.purchaseRepository.checkBuyer(purchaseID,userID)) throw NotBuyer()
             if(it.purchaseRepository.checkIfHasAlreadyPayed(purchaseID,payingUser)) throw AlreadyPayed()
 
             it.purchaseRepository.payPurchase(purchaseID,payingUser)
 
 
+        }
+    }
+
+    fun getPurchaseInformation(purchaseID : String, userID : Int, tripID: Int) : Purchase{
+        return transactionManager.run {
+            if(!it.userRepository.isInTrip(userID, tripID)) throw NotInThisTrip()
+            val purchase = it.purchaseRepository.getPurchaseInformation(purchaseID) ?: throw PurchaseNotExists()
+            val userTrips = it.userRepository.getTripsOfUser(userID)
+            if(userTrips.trips.none { trip -> trip.id == purchase.trip_id  }) throw PurchaseNotInATripOfUser()
+            purchase
         }
     }
 

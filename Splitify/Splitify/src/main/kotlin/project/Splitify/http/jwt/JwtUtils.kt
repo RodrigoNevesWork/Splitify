@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import org.springframework.stereotype.Component
 import project.splitify.domain.JWToken
+import project.splitify.domain.UserCreation
 import javax.crypto.spec.SecretKeySpec
 
 @Component
@@ -16,21 +17,19 @@ class JwtUtils(jwtConfiguration: JwtConfiguration) {
 
     data class JwtPayload(val claims: Claims) {
 
-        val userPhone: String = claims[USER_CREDENTIALS] as String
-
         companion object {
 
-            fun createJwtPayload(userPhone : String): JwtPayload {
+            fun createJwtPayload(userCreation: UserCreation): JwtPayload {
                 val claims = Jwts.claims()
-                claims[USER_CREDENTIALS] = userPhone
+                claims[USER_CREATION] = userCreation
                 return JwtPayload(claims)
             }
 
-            private const val USER_CREDENTIALS = "userphone"
+            private const val USER_CREATION = "userCreation"
         }
     }
 
-    fun createAccessToken(jwtPayload: JwtPayload): JWToken {
+    fun createJWToken(jwtPayload: JwtPayload): JWToken {
 
         return JWToken(
              token =   Jwts.builder()
@@ -39,7 +38,6 @@ class JwtUtils(jwtConfiguration: JwtConfiguration) {
                        .compact()
         )
     }
-
 
     companion object {
         private const val SECRET_KEY_ALGORITHM = "HmacSHA512"

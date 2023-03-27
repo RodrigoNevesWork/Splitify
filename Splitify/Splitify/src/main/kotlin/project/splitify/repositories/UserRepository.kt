@@ -12,8 +12,10 @@ interface UserRepository {
     fun updateUser(userID: Int, userCreation : UserCreation)
     fun deleteUser(userID: Int)
     fun getPurchasesFromTrip(userID : Int, tripID : Int) : List<Purchase>
-    fun checkIfIsInTrip(userID : Int, tripID: Int) : Boolean
-    fun getUserByEmail(email: String) : UserOutput?
+    fun isInTrip(userID : Int, tripID: Int) : Boolean
+    fun getUsers(name: String) : ListOfUsers
     fun getTripsOfUser(userID : Int) : Trips
+    fun getDebtsOfUserInTrip(userID : Int, tripID : Int) : List<Debt>
+    fun getDebtorsInTrip(userID : Int, tripID : Int) : List<Debtor>
 
 }

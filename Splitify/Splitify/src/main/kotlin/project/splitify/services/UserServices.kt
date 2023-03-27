@@ -1,52 +1,57 @@
 package project.splitify.services
 
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 import project.splitify.domain.*
 import project.splitify.http.jwt.JwtUtils
 import project.splitify.repositories.TransactionManager
 
 
-@Component
+@Service
 class UserServices(
     private val transactionManager: TransactionManager,
-    private val utils: Utils,
+    private val encryptionUtils: EncryptionUtils,
     private val jwtUtils: JwtUtils
 ) {
+
+    private fun isPasswordSafe(password : String) : Boolean{
+        val regex = Regex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}\$")
+        return regex.matches(password)
+    }
 
     private val PHONE_SIZE = 9
 
     private fun emailExists(email: String) =
         transactionManager.run{
-            val encrypted = utils.encrypt(email)
+            val encrypted = encryptionUtils.encrypt(email)
             it.userRepository.checkIfEmailExists(encrypted)
         }
 
     private fun phoneExists(phone : String) : Boolean =
         transactionManager.run {
-            val encrypted = utils.encrypt(phone)
+            val encrypted = encryptionUtils.encrypt(phone)
             it.userRepository.checkIfPhoneExists(encrypted)
         }
 
     private fun checkDetails(email: String, phone: String, password: String){
         if(!email.contains("@")) throw BadEmail()
-        if(phone.length != PHONE_SIZE) throw BadEmail()
-        if(!utils.isPasswordSafe(password)) throw WeakPassword()
+        if(phone.length != PHONE_SIZE) throw BadPhone()
+        if(!isPasswordSafe(password)) throw WeakPassword()
         if(emailExists(email)) throw EmailAlreadyInUse()
         if(phoneExists(phone)) throw PhoneAlreadyInUse()
     }
 
     fun getUserByToken(JWToken : JWToken) : User?{
         return transactionManager.run {
-            val hashedToken = utils.encrypt(JWToken.token)
+            val hashedToken = encryptionUtils.encrypt(JWToken.token)
             it.userRepository.getUserByToken(hashedToken)
         }
     }
 
-    fun getUserByEmail(email : String) : UserOutput{
+    fun getUserByName(name : String) : ListOfUsers{
         return transactionManager.run {
-            val encryptedEmail = utils.encrypt(email)
-            val userEncrypted = it.userRepository.getUserByEmail(encryptedEmail) ?: throw UserNotExists()
-            utils.decryptUserOutput(userEncrypted)
+            val encryptedName = encryptionUtils.encrypt(name)
+            val usersEncrypted = it.userRepository.getUsers(encryptedName)
+            usersEncrypted.map { userOutput ->  encryptionUtils.decryptUserOutput(userOutput) }
         }
     }
 
@@ -54,29 +59,50 @@ class UserServices(
 
         checkDetails(userCreation.email, userCreation.phone, userCreation.password)
 
-        val jwtPayload = JwtUtils.JwtPayload.createJwtPayload(userCreation.phone)
+        val jwtPayload = JwtUtils.JwtPayload.createJwtPayload(userCreation)
 
-        val accesToken = jwtUtils.createAccessToken(jwtPayload)
+        val accesToken = jwtUtils.createJWToken(jwtPayload)
 
-        val userEncrypted = utils.encryptUserCreation(userCreation)
+        val userEncrypted = encryptionUtils.encryptUserCreation(userCreation)
 
-        val encryptedToken = utils.encrypt(accesToken.token)
+        val encryptedToken = encryptionUtils.encrypt(accesToken.token)
 
         val id = transactionManager.run { it.userRepository.createUser(encryptedToken, userEncrypted) }
 
         return Pair(id,accesToken)
     }
 
-    fun getUser(userId : Int) : UserOutput? {
-        return transactionManager.run {
-            val userEncripted = it.userRepository.getUser(userId) ?: throw UserNotExists()
-             utils.decryptUserOutput(userEncripted)
-        }
-    }
 
     fun getTripsOfUser(userID: Int) : Trips{
         return transactionManager.run {
             it.userRepository.getTripsOfUser(userID)
+        }
+    }
+
+    fun deleteUser(userID : Int, userFromCookie: Int){
+
+        if(userFromCookie != userID) throw Unauthorized()
+
+        transactionManager.run {
+            it.userRepository.getUser(userID) ?: throw UserNotExists()
+            it.userRepository.deleteUser(userID)
+        }
+    }
+
+    fun getDebtsOfUserInTrip(userID : Int, tripID : Int) : List<Debt>{
+        return transactionManager.run {
+            if(!it.userRepository.isInTrip(userID, tripID)) throw NotInThisTrip()
+            it.userRepository.getDebtsOfUserInTrip(userID, tripID)
+        }
+    }
+
+    fun getDebtorsInTrip(userID : Int, tripID : Int) : List<Debtor>{
+          return transactionManager.run {
+            if(!it.userRepository.isInTrip(userID, tripID)) throw NotInThisTrip()
+            val debtorsEncrypted = it.userRepository.getDebtorsInTrip(userID, tripID)
+            debtorsEncrypted.map { debtor ->
+                    Debtor( encryptionUtils.decryptUserOutput(debtor.user), debtor.debt)
+             }
         }
     }
 

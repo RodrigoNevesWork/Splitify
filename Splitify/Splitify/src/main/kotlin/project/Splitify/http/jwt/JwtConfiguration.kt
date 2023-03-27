@@ -7,8 +7,6 @@ import org.springframework.scheduling.annotation.EnableScheduling
 @Configuration
 @EnableScheduling
 class JwtConfiguration(
-
     @Value("\${server.config.secrets.access-token-secret}")
     val accessTokenSecret: String
-
     )

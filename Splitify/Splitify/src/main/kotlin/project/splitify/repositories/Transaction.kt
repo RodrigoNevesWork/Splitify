@@ -8,5 +8,7 @@ interface Transaction {
 
     val purchaseRepository : PurchaseRepository
 
+    val friendsManagementRepository : FriendsManagementRepository
+
     fun rollback() // for testing methods
 }

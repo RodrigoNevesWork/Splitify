@@ -1,20 +1,17 @@
 package project.splitify.http
 
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
-import project.splitify.domain.TripCreation
-import project.splitify.domain.TripInput
-import project.splitify.domain.TripPurchases
-import project.splitify.domain.User
-import project.splitify.http.pipeline.Authentication
+import org.springframework.web.bind.annotation.*
+import project.splitify.domain.*
+import project.splitify.http.media.Problem.Companion.PROBLEM_MEDIA_TYPE
+import project.splitify.http.media.Uris
+import project.splitify.http.pipeline.authentication.Authentication
 import project.splitify.services.TripServices
+import project.splitify.http.media.siren.SirenModel.Companion.SIREN_MEDIA_TYPE
 
 @Authentication
 @RestController
+@RequestMapping(produces = [SIREN_MEDIA_TYPE, PROBLEM_MEDIA_TYPE])
 class TripController(
     private val tripServices: TripServices
 ) {
@@ -25,9 +22,9 @@ class TripController(
         return ResponseEntity.status(201).body("Trip added with the id $id")
     }
 
-    @PostMapping(Uris.Users.BY_ID)
-    fun addUserToTrip(@PathVariable user_id : Int, user : User, @RequestBody trip : TripInput) : ResponseEntity<String>{
-        tripServices.addUserToTrip(user_id,trip.id,user.id)
+    @PostMapping(Uris.Trips.USERS_IN_TRIP)
+    fun addUserToTrip(@PathVariable trip_id : Int , user : User, @RequestBody userAdded : UserInput) : ResponseEntity<String>{
+        tripServices.addUserToTrip(userAdded.id,trip_id,user.id)
         return ResponseEntity.ok("User Added to Trip")
     }
 
@@ -35,8 +32,6 @@ class TripController(
     fun getTripInformation(@PathVariable trip_id : Int, user: User) : ResponseEntity<TripPurchases> {
         val tripInformation = tripServices.getTrip(trip_id, user.id)
         return ResponseEntity.ok(tripInformation)
-
     }
-
 
 }

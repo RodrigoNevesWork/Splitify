@@ -1,8 +1,11 @@
-package project.splitify.http.pipeline
+package project.splitify.http.pipeline.authentication
 
 import org.springframework.stereotype.Component
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
+import project.splitify.domain.Unauthorized
+import project.splitify.domain.User
+import project.splitify.http.pipeline.UserArgumentResolver
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -15,27 +18,25 @@ class AuthenticationInterceptor(
         if(
             (handler is HandlerMethod) &&
             (
-            handler.hasMethodAnnotation(Authentication::class.java) || handler.method.declaringClass.isAnnotationPresent(Authentication::class.java)
+            handler.hasMethodAnnotation(Authentication::class.java) || handler.method.declaringClass.isAnnotationPresent(
+                Authentication::class.java)
             )
         ){
-            val cookies = request.cookies
+            val cookies = request.cookies ?: throw Unauthorized()
             val tokenCookie = cookies.find { it.name == "token" }
 
             val user = authorizationHeaderProcessor.process(tokenCookie)
 
             return if(user == null){
-                response.status = 401
-                response.addHeader(NAME_WWW_AUTHENTICATE_HEADER, AuthorizationHeaderProcessor.SCHEMA)
-                false
+               throw Unauthorized()
             }else{
-                UserArgumentResolver.addUserTo(user,request)
+                if(handler.methodParameters.any { it.parameterType == User::class.java }){
+                    UserArgumentResolver.addUserTo(user, request)
+                }
                 true
             }
         }
         return true
     }
 
-    companion object {
-        private const val NAME_WWW_AUTHENTICATE_HEADER = "WWW-Authenticate"
-    }
 }

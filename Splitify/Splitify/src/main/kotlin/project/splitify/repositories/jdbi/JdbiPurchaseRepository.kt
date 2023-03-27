@@ -27,7 +27,7 @@ class JdbiPurchaseRepository(
             .execute()
     }
 
-    override fun checkBuyer(purchaseID: UUID, userID: Int) : Boolean {
+    override fun checkBuyer(purchaseID: String, userID: Int) : Boolean {
        return handle
             .createQuery("select count(*) from dbo.purchase where id = :purchaseID and user_id = :userID")
             .bind("purchaseID",purchaseID)
@@ -37,7 +37,7 @@ class JdbiPurchaseRepository(
 
     }
 
-    override fun checkIfHasAlreadyPayed(purchaseID: UUID, userID: Int) : Boolean{
+    override fun checkIfHasAlreadyPayed(purchaseID: String, userID: Int) : Boolean{
         return handle
             .createQuery("select count(*) from dbo.user_purchase_payed where purchase_id = :purchaseID and user_id = :userID")
             .bind("purchaseID",purchaseID)
@@ -46,12 +46,20 @@ class JdbiPurchaseRepository(
             .single() == 1
     }
 
-    override fun payPurchase(purchaseID: UUID, payingUser: Int) {
+    override fun payPurchase(purchaseID: String, payingUser: Int) {
          handle
             .createUpdate("insert into dbo.user_purchase_payed values(:userID,:purchaseID)")
             .bind("userID", payingUser)
             .bind("purchaseID", purchaseID)
             .execute()
 
+    }
+
+    override fun getPurchaseInformation(purchaseID: String) : Purchase? {
+        return handle
+            .createQuery("select * from dbo.purchase where id = :purchaseID")
+            .bind("purchaseID",purchaseID)
+            .mapTo<Purchase>()
+            .singleOrNull()
     }
 }

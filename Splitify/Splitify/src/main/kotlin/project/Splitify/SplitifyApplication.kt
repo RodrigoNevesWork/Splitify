@@ -7,6 +7,13 @@ import org.postgresql.ds.PGSimpleDataSource
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
+import project.splitify.domain.BadEmail
+import project.splitify.domain.Forbidden
+import project.splitify.domain.UnauthorizedRequest
+import project.splitify.http.pipeline.exceptionHandler.ExceptionHandler.Companion.toProblemType
+import project.splitify.repositories.TransactionManager
+import project.splitify.repositories.jdbi.JbdiUserRepository
+import project.splitify.services.UserServices
 
 fun Jdbi.configure(): Jdbi {
 	installPlugin(KotlinPlugin())
@@ -26,8 +33,6 @@ class SplitifyApplication {
 }
 
 
-
 fun main(args: Array<String>) {
-
-runApplication<SplitifyApplication>(*args)
+	runApplication<SplitifyApplication>(*args)
 }
