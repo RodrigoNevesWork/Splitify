@@ -144,12 +144,12 @@ class JbdiUserRepository(
             "WITH user_purchase AS (\n" +
                 "    SELECT p.id, p.price, p.description, p.trip_id, p.user_id\n" +
                 "    FROM dbo.Purchase p\n" +
-                "    WHERE p.user_id = :user_id AND p.trip_id = :trip_id\n" +
+                "    WHERE p.user_id = :userID AND p.trip_id = :tripID\n" +
                 "),\n" +
                 "total_users_in_trip AS (\n" +
                 "    SELECT COUNT(*) AS total_users\n" +
                 "    FROM dbo.User_Trip ut\n" +
-                "    WHERE ut.trip_id = :trip_id\n" +
+                "    WHERE ut.trip_id = :tripID\n" +
                 "),\n" +
                 "debts AS (\n" +
                 "    SELECT up.id AS purchase_id, up.price, up.description, up.trip_id, up.user_id,\n" +
@@ -166,10 +166,11 @@ class JbdiUserRepository(
                 "    WHERE upp.purchase_id IS NULL OR upp.purchase_id = d.purchase_id\n" +
                 ")\n" +
                 "\n" +
-                "SELECT u.id, u.name, u.email, u.phone, d.debt\n" +
+                "SELECT u.id, u.name, u.email, u.phone, d.debt, d.purchase_id, d.description\n" +
                 "FROM dbo.User u\n" +
                 "JOIN debts_with_paid_status d ON u.id = d.debtor_id\n" +
                 "WHERE d.paid_id IS NULL;\n"
+
 
 
 
