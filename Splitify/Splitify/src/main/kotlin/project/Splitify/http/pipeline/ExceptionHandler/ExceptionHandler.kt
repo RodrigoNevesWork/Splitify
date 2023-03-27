@@ -117,8 +117,7 @@ import java.net.URI
 
 
  companion object {
-      const val PROBLEMS_DOCS_URI =
-       "https://github.com/isel-leic-daw/2022-daw-leic51d-g03/tree/main/docs/problems/"
+      const val PROBLEMS_DOCS_URI = "https://github.com/RodrigoNevesWork/Splitify/tree/main/docs/problems"
 
       fun Exception.toProblemType(): String =
           (this::class.simpleName ?: "Unknown")
