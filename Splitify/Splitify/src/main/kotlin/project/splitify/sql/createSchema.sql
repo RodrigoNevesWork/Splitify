@@ -18,6 +18,7 @@ create table if not exists  dbo.Purchase(
     id text unique,
     price numeric,
     description varchar(20),
+    purchase_date date,
     user_id int references dbo.User(id),
     trip_id int references dbo.Trip(id)
 );
@@ -39,7 +40,6 @@ create table if not exists dbo.friend_request(
     user_requesting int references dbo.User(id),
     constraint unique_pair_constraint_friend_request UNIQUE (user_id,user_requesting),
     constraint different_request check (user_id != user_requesting)
-
 );
 
 create table if not exists dbo.friend_list(

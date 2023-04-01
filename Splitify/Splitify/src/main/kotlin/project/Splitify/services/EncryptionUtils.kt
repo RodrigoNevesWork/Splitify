@@ -1,8 +1,8 @@
 package project.splitify.services
 
 import org.springframework.stereotype.Component
-import project.splitify.domain.UserCreation
-import project.splitify.domain.UserOutput
+import project.splitify.http.userController.UserCreation
+import project.splitify.http.userController.UserOutput
 import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
@@ -41,7 +41,7 @@ class EncryptionUtils {
         )
     }
 
-    fun decryptUserOutput(userOutput : UserOutput) : UserOutput{
+    fun decryptUserOutput(userOutput : UserOutput) : UserOutput {
         return userOutput.copy(
             name = decrypt(userOutput.name),
             email = decrypt(userOutput.email),

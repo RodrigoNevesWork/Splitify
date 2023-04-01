@@ -1,16 +1,15 @@
-package project.splitify.http
+package project.splitify.http.userController
 
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseCookie
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import project.splitify.domain.*
+import project.splitify.http.userController.*
 import project.splitify.http.media.Actions
 import project.splitify.http.media.Links
 import project.splitify.http.media.Problem.Companion.PROBLEM_MEDIA_TYPE
 import project.splitify.http.media.Rels
 import project.splitify.http.media.Uris
-import project.splitify.http.media.siren.ActionModel
 import project.splitify.http.media.siren.SirenModel
 import project.splitify.http.media.siren.SirenModel.Companion.SIREN_MEDIA_TYPE
 import project.splitify.http.media.siren.SubEntity
@@ -25,10 +24,10 @@ import javax.servlet.http.HttpServletResponse
 class UserController(
     private val userServices : UserServices,
     private val friendManagementServices : FriendManagementServices
-) {
+){
 
     @PostMapping(Uris.Users.USERS)
-    fun createUser(@RequestBody userCreation: UserCreation,response: HttpServletResponse) : SirenModel<String> {
+    fun createUser(@RequestBody userCreation: UserCreation, response: HttpServletResponse) : SirenModel<String> {
 
         val parts = userServices.createUser(userCreation)
 
@@ -42,15 +41,39 @@ class UserController(
                 Links.userHome
             ),
             actions = listOf(
-                Actions.createTrip,
+                Actions.createTrip
             )
         )
-
     }
 
-    @PostMapping
-    fun login(loginModel: LoginModel, response : HttpServletResponse) : SirenModel<Any>{
-        TODO()
+    @PostMapping(Uris.Users.LOGIN)
+    fun login(loginModel: LoginModel, response : HttpServletResponse) : SirenModel<LoginOutput>{
+        val credentials = userServices.login(loginModel)
+        addAuthenticationCookies(response,credentials.token)
+        return SirenModel(
+            clazz = listOf(Rels.LOGIN),
+            properties = credentials,
+            links =  listOf(
+                Links.home,
+                Links.userHome
+            ),
+            actions = listOf(
+                Actions.createTrip,
+                Actions.userTrips(credentials.id)
+            )
+        )
+    }
+
+    @Authentication
+    @PostMapping(Uris.Users.LOGOUT)
+    fun logout(response: HttpServletResponse) : SirenModel<String>{
+        clearAuthenticationCookies(response)
+        return SirenModel(
+            properties = "Logout",
+            links = listOf(
+                Links.home
+            )
+        )
     }
 
     @Authentication
@@ -68,7 +91,7 @@ class UserController(
 
     @Authentication
     @GetMapping(Uris.Users.SEARCH_USER)
-    fun searchUserByUsername(@PathVariable user_name: String) :  SirenModel<Int>{
+    fun searchUserByUsername(@RequestParam(required = true) user_name : String) :  SirenModel<Int>{
         val users = userServices.getUserByName(user_name)
         return SirenModel(
             clazz = listOf(Rels.SEARCH_USER),
@@ -83,7 +106,7 @@ class UserController(
                     rel = listOf(Rels.ITEM, Rels.USER),
                     properties = user,
                     links = listOf(
-                        Links.self(Uris.searchUser(user.name)),
+                        Links.self(Uris.searchUser()),
                         Links.home,
                         Links.userHome,
                     ),
@@ -104,7 +127,7 @@ class UserController(
             clazz = listOf(Rels.USER_TRIPS),
             properties = trips.trips.count(),
             links = listOf(
-                Links.self(Uris.userTrips()),
+                Links.self(Uris.userTrips(user_id)),
                 Links.home,
                 Links.userHome
             ),
@@ -118,7 +141,7 @@ class UserController(
                         Links.userHome
                     ),
                     actions = listOf(
-                        Actions.createPurchase,
+                        Actions.createPurchase(trip.id),
                         Actions.addUserToTrip(trip.id)
                     )
                 )
@@ -199,7 +222,6 @@ class UserController(
                     )
                 )
             }
-
         )
     }
 
@@ -262,6 +284,14 @@ class UserController(
 
             response.addCookie(responseCookie)
 
+        }
+
+        private fun clearAuthenticationCookies(response: HttpServletResponse){
+            val tokenCookie = ResponseCookie.from("token", "")
+                .httpOnly(true)
+                .maxAge(0)
+                .sameSite("Strict")
+                .build()
         }
 
         private fun HttpServletResponse.addCookie(cookie: ResponseCookie) {

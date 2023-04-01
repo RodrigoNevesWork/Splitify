@@ -2,7 +2,10 @@ package project.splitify.repositories.jdbi
 
 import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.kotlin.mapTo
-import project.splitify.domain.*
+import project.splitify.http.PurchaseControler.Purchase
+import project.splitify.http.tripController.Trip
+import project.splitify.http.tripController.Trips
+import project.splitify.http.userController.*
 import project.splitify.repositories.UserRepository
 import project.splitify.repositories.jdbi.mappers.DebtMapper
 import project.splitify.repositories.jdbi.mappers.DebtorMapper
@@ -175,10 +178,18 @@ class JbdiUserRepository(
 
 
         return handle.createQuery(query)
-                     .bind("user_id",userID)
-                     .bind("trip_id",tripID)
+                     .bind("userID",userID)
+                     .bind("tripID",tripID)
                      .map(DebtorMapper())
                      .toList()
+    }
+
+    override fun login(loginModel: LoginModel): LoginOutput? {
+        return handle.createQuery("select token from dbo.user where email = :email and password = :password")
+              .bind("email", loginModel.email)
+              .bind("password", loginModel.password)
+              .mapTo<LoginOutput>()
+              .singleOrNull()
     }
 
 }

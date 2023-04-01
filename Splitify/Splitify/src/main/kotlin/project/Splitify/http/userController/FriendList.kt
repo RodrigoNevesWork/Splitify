@@ -1,4 +1,4 @@
-package project.splitify.domain
+package project.splitify.http.userController
 
 data class Friend(val id : Int, val name : Int)
 

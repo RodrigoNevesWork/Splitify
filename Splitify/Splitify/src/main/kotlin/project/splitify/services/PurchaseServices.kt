@@ -2,7 +2,10 @@ package project.splitify.services
 
 import org.springframework.stereotype.Service
 import project.splitify.domain.*
+import project.splitify.http.PurchaseControler.Purchase
+import project.splitify.http.PurchaseControler.PurchaseCreation
 import project.splitify.repositories.TransactionManager
+import java.time.LocalDate
 import java.util.*
 
 @Service
@@ -11,6 +14,7 @@ class PurchaseServices(
 ) {
 
     fun createPurchase(purchaseCreation: PurchaseCreation, userID : Int, tripID : Int) : String{
+
         return transactionManager.run {
 
         if(!it.userRepository.isInTrip(userID,tripID)) throw NotInThisTrip()
@@ -25,13 +29,12 @@ class PurchaseServices(
                     price = purchaseCreation.price,
                     description = purchaseCreation.description,
                     trip_id = tripID,
-                    user_id = userID
+                    user_id = userID,
+                    purchase_date = LocalDate.now()
                 )
             )
-
              id
         }
-
     }
 
     fun payPurchase(purchaseID : String, userID: Int, payingUser : Int, tripID : Int){
@@ -48,7 +51,7 @@ class PurchaseServices(
         }
     }
 
-    fun getPurchaseInformation(purchaseID : String, userID : Int, tripID: Int) : Purchase{
+    fun getPurchaseInformation(purchaseID : String, userID : Int, tripID: Int) : Purchase {
         return transactionManager.run {
             if(!it.userRepository.isInTrip(userID, tripID)) throw NotInThisTrip()
             val purchase = it.purchaseRepository.getPurchaseInformation(purchaseID) ?: throw PurchaseNotExists()

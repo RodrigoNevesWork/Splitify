@@ -1,6 +1,6 @@
-package project.splitify.domain
+package project.splitify.http.userController
 
-import java.util.UUID
+import project.splitify.http.PurchaseControler.Purchase
 
 /**
  * @param purchase -> the purchase that was made and the user has not paid

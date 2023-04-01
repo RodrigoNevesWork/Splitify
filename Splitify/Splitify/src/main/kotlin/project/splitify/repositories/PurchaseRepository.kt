@@ -1,6 +1,6 @@
 package project.splitify.repositories
 
-import project.splitify.domain.Purchase
+import project.splitify.http.PurchaseControler.Purchase
 
 interface PurchaseRepository {
     fun addPurchase(purchase: Purchase)

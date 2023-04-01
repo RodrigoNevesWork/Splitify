@@ -1,4 +1,4 @@
-package project.splitify.domain
+package project.splitify.http.userController
 
 import javax.validation.constraints.Email
 

@@ -2,10 +2,10 @@ package project.splitify.repositories.jdbi
 
 import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.kotlin.mapTo
-import project.splitify.domain.Purchase
-import project.splitify.domain.Trip
-import project.splitify.domain.TripCreation
-import project.splitify.domain.TripPurchases
+import project.splitify.http.PurchaseControler.Purchase
+import project.splitify.http.tripController.Trip
+import project.splitify.http.tripController.TripCreation
+import project.splitify.http.tripController.TripPurchases
 import project.splitify.repositories.TripRepository
 
 class JdbiTripRepository(

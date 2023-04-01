@@ -1,6 +1,8 @@
 package project.splitify.repositories
 
-import project.splitify.domain.*
+import project.splitify.http.PurchaseControler.Purchase
+import project.splitify.http.tripController.Trips
+import project.splitify.http.userController.*
 
 interface UserRepository {
 
@@ -17,5 +19,6 @@ interface UserRepository {
     fun getTripsOfUser(userID : Int) : Trips
     fun getDebtsOfUserInTrip(userID : Int, tripID : Int) : List<Debt>
     fun getDebtorsInTrip(userID : Int, tripID : Int) : List<Debtor>
+    fun login(loginModel: LoginModel): LoginOutput?
 
 }

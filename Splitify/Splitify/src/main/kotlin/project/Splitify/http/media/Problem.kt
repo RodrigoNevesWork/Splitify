@@ -11,7 +11,6 @@ data class Problem(
     val instance: URI? = null
 ) {
 
-
     fun toResponseEntity() = ResponseEntity
         .status(status)
         .header("Content-Type", PROBLEM_MEDIA_TYPE)

@@ -1,7 +1,7 @@
 package project.splitify.repositories
 
-import project.splitify.domain.TripCreation
-import project.splitify.domain.TripPurchases
+import project.splitify.http.tripController.TripCreation
+import project.splitify.http.tripController.TripPurchases
 
 interface TripRepository {
 

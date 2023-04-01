@@ -2,7 +2,9 @@ package project.splitify.services
 
 import org.springframework.stereotype.Service
 import project.splitify.domain.*
+import project.splitify.http.userController.*
 import project.splitify.http.jwt.JwtUtils
+import project.splitify.http.tripController.Trips
 import project.splitify.repositories.TransactionManager
 
 
@@ -18,7 +20,7 @@ class UserServices(
         return regex.matches(password)
     }
 
-    private val PHONE_SIZE = 9
+    private val PHONE_SIZE = 9 //Portuguese phone number size
 
     private fun emailExists(email: String) =
         transactionManager.run{
@@ -42,12 +44,22 @@ class UserServices(
 
     fun getUserByToken(JWToken : JWToken) : User?{
         return transactionManager.run {
-            val hashedToken = encryptionUtils.encrypt(JWToken.token)
-            it.userRepository.getUserByToken(hashedToken)
+            val encryptedToken = encryptionUtils.encrypt(JWToken.token)
+            it.userRepository.getUserByToken(encryptedToken)
         }
     }
 
-    fun getUserByName(name : String) : ListOfUsers{
+    fun login(loginModel: LoginModel) : LoginOutput {
+        val encryptedPassword = encryptionUtils.encrypt(loginModel.password)
+
+        val credentials = transactionManager.run {
+            it.userRepository.login(LoginModel(loginModel.email,encryptedPassword))
+        } ?: throw Unauthorized()
+
+        return credentials
+    }
+
+    fun getUserByName(name : String) : ListOfUsers {
         return transactionManager.run {
             val encryptedName = encryptionUtils.encrypt(name)
             val usersEncrypted = it.userRepository.getUsers(encryptedName)
@@ -73,7 +85,7 @@ class UserServices(
     }
 
 
-    fun getTripsOfUser(userID: Int) : Trips{
+    fun getTripsOfUser(userID: Int) : Trips {
         return transactionManager.run {
             it.userRepository.getTripsOfUser(userID)
         }
@@ -101,7 +113,7 @@ class UserServices(
             if(!it.userRepository.isInTrip(userID, tripID)) throw NotInThisTrip()
             val debtorsEncrypted = it.userRepository.getDebtorsInTrip(userID, tripID)
             debtorsEncrypted.map { debtor ->
-                    Debtor( encryptionUtils.decryptUserOutput(debtor.user), debtor.debt)
+                    Debtor( debtor.purchaseID,debtor.description,encryptionUtils.decryptUserOutput(debtor.user), debtor.debt)
              }
         }
     }

@@ -6,13 +6,15 @@ abstract class BadRequest(msg : String) : Exception(msg)
 
 abstract class NotFound(msg : String) : Exception(msg)
 
+abstract class Conflit(msg : String) : Exception(msg)
+
 abstract class UnauthorizedRequest(msg : String) : Exception(msg)
 
 abstract class Forbidden(msg : String) : Exception(msg)
 
 class FriendYourself : BadRequest("Can't be friends with yourself")
 
-class EmailAlreadyInUse : BadRequest("Email already in Use")
+class EmailAlreadyInUse : Conflit("Email already in Use")
 
 class PhoneAlreadyInUse : BadRequest("Phone number already in use")
 

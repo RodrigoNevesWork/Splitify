@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import org.springframework.stereotype.Component
 import project.splitify.domain.JWToken
-import project.splitify.domain.UserCreation
+import project.splitify.http.userController.UserCreation
 import javax.crypto.spec.SecretKeySpec
 
 @Component

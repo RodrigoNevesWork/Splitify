@@ -8,12 +8,13 @@ object Actions {
     private const val GET = "GET"
     private const val POST = "POST"
     private const val DELETE = "DELETE"
+    private const val PUT = "Put"
 
     val signup = ActionModel(
         name = Rels.SIGNUP,
         title = "Signup",
         method = POST,
-        href = Uris.userSignup()
+        href = Uris.users()
     )
 
     fun deleteUser(userID : Int) = ActionModel(
@@ -23,18 +24,46 @@ object Actions {
         href = Uris.userByID(userID)
     )
 
-    fun searchUser(userName : String) = ActionModel(
+    fun addFriend(userID : Int) = ActionModel(
+        name = Rels.ADD_FRIEND,
+        title = "Add Friend",
+        method = POST,
+        href = Uris.userByID(userID)
+    )
+
+    fun acceptRequest(userID : Int,requestID : UUID) = ActionModel(
+        name = Rels.FRIEND_REQUEST,
+        title = "Accept Friend Request",
+        method = PUT,
+        href = Uris.friendsRequest(userID,requestID)
+    )
+
+    fun declineRequest(userID : Int,requestID : UUID) = ActionModel(
+        name = Rels.FRIEND_REQUEST,
+        title = "Decline Friend Request",
+        method = PUT,
+        href = Uris.friendsRequest(userID,requestID)
+    )
+
+    fun payPurchase(tripID : Int, purchaseID : String) = ActionModel(
+        name = Rels.PAY_PURCHASE,
+        title = "Pay Purchase",
+        method = POST,
+        href = Uris.purchase(tripID, purchaseID)
+    )
+
+    val searchUser = ActionModel(
         name = Rels.SEARCH_USER,
         title = "Search user",
         method = GET,
-        href = Uris.searchUser(userName)
+        href = Uris.searchUser()
     )
 
-    val userTrips = ActionModel(
+    fun userTrips(userID: Int) = ActionModel(
         name = Rels.USER_TRIPS,
         title = "Trips of User",
         method = GET,
-        href = Uris.userTrips()
+        href = Uris.userTrips(userID)
     )
 
     fun addUserToTrip(tripID : Int) = ActionModel(
@@ -58,18 +87,18 @@ object Actions {
         href = Uris.tripByID(tripID)
     )
 
-    val createPurchase = ActionModel(
+    fun createPurchase(tripID: Int) = ActionModel(
         name = Rels.CREATE_PURCHASE,
         title = "Create Purchase",
         method = POST,
-        href = Uris.createPurchase()
+        href = Uris.createPurchase(tripID)
     )
 
-    fun purchaseByID(purchaseID : UUID) = ActionModel(
+    fun purchaseByID(tripID: Int,purchaseID : String) = ActionModel(
         name = Rels.PAY_PURCHASE,
         title = "Pay Purchase",
         method = POST,
-        href = Uris.purchase(purchaseID)
+        href = Uris.purchase(tripID,purchaseID)
     )
 
 

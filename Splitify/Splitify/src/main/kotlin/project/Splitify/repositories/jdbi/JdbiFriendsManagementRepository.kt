@@ -2,10 +2,9 @@ package project.splitify.repositories.jdbi
 
 import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.kotlin.mapTo
-import project.splitify.domain.Friend
-import project.splitify.domain.FriendRequest
+import project.splitify.http.userController.Friend
+import project.splitify.http.userController.FriendRequest
 import project.splitify.repositories.FriendsManagementRepository
-import java.util.*
 
 class JdbiFriendsManagementRepository(
     private val handle : Handle

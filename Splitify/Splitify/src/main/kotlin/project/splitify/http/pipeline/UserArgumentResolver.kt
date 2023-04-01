@@ -8,7 +8,7 @@ import org.springframework.web.context.request.NativeWebRequest
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.method.support.ModelAndViewContainer
 import project.splitify.domain.Unauthorized
-import project.splitify.domain.User
+import project.splitify.http.userController.User
 import javax.servlet.http.HttpServletRequest
 
 @Component

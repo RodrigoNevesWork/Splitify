@@ -2,8 +2,8 @@ package project.splitify.repositories.jdbi.mappers
 
 import org.jdbi.v3.core.mapper.RowMapper
 import org.jdbi.v3.core.statement.StatementContext
-import project.splitify.domain.Debtor
-import project.splitify.domain.UserOutput
+import project.splitify.http.userController.Debtor
+import project.splitify.http.userController.UserOutput
 import java.sql.ResultSet
 
 class DebtorMapper : RowMapper<Debtor> {
@@ -14,7 +14,11 @@ class DebtorMapper : RowMapper<Debtor> {
             email = rs.getString("email"),
             phone = rs.getString("phone")
         )
+
         val debt = rs.getFloat("debt")
-        return Debtor(user, debt)
+        val purchaseId = rs.getString("purchase_id")
+        val description = rs.getString("description")
+        return Debtor(purchaseId,description,user,debt)
     }
 }
+

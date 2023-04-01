@@ -1,5 +1,8 @@
 package project.splitify.http.media.siren
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 data class SirenModel<T>(
     val clazz: List<String>? = null,
     val properties: T? = null,
