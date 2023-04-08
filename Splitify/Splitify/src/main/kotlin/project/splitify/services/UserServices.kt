@@ -2,9 +2,9 @@ package project.splitify.services
 
 import org.springframework.stereotype.Service
 import project.splitify.domain.*
-import project.splitify.http.userController.*
 import project.splitify.http.jwt.JwtUtils
-import project.splitify.http.tripController.Trips
+import project.splitify.http.tripController.tripDTO.Trips
+import project.splitify.http.userController.userDTOS.*
 import project.splitify.repositories.TransactionManager
 
 

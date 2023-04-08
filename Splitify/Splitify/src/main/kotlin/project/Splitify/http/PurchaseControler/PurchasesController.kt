@@ -1,8 +1,10 @@
-package project.splitify.http.PurchaseControler
+package project.splitify.http.purchaseControler
 
 import org.springframework.web.bind.annotation.*
-import project.splitify.http.userController.User
-import project.splitify.http.userController.UserInput
+import project.splitify.http.purchaseControler.purchaseDTO.Purchase
+import project.splitify.http.purchaseControler.purchaseDTO.PurchaseCreation
+import project.splitify.http.userController.userDTOS.User
+import project.splitify.http.userController.userDTOS.UserInput
 import project.splitify.http.media.Actions
 import project.splitify.http.media.Links
 import project.splitify.http.media.Problem.Companion.PROBLEM_MEDIA_TYPE

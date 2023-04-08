@@ -2,10 +2,10 @@ package project.splitify.repositories.jdbi
 
 import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.kotlin.mapTo
-import project.splitify.http.PurchaseControler.Purchase
-import project.splitify.http.tripController.Trip
-import project.splitify.http.tripController.Trips
-import project.splitify.http.userController.*
+import project.splitify.http.purchaseControler.purchaseDTO.Purchase
+import project.splitify.http.tripController.tripDTO.Trip
+import project.splitify.http.tripController.tripDTO.Trips
+import project.splitify.http.userController.userDTOS.*
 import project.splitify.repositories.UserRepository
 import project.splitify.repositories.jdbi.mappers.DebtMapper
 import project.splitify.repositories.jdbi.mappers.DebtorMapper

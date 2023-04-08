@@ -1,4 +1,4 @@
-package project.splitify.http.userController
+package project.splitify.http.userController.userDTOS
 
 import java.util.*
 

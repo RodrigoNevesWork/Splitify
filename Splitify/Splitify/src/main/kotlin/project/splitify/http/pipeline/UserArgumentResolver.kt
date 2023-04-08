@@ -8,7 +8,7 @@ import org.springframework.web.context.request.NativeWebRequest
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.method.support.ModelAndViewContainer
 import project.splitify.domain.Unauthorized
-import project.splitify.http.userController.User
+import project.splitify.http.userController.userDTOS.User
 import javax.servlet.http.HttpServletRequest
 
 @Component
@@ -30,8 +30,8 @@ class UserArgumentResolver : HandlerMethodArgumentResolver {
     companion object{
         private const val KEY = "UserArgumentResolver"
 
-        fun addUserTo(player: User, request: HttpServletRequest) {
-            return request.setAttribute(KEY, player)
+        fun addUserTo(user: User, request: HttpServletRequest) {
+            return request.setAttribute(KEY, user)
         }
 
         fun getUserFrom(request: HttpServletRequest): User {

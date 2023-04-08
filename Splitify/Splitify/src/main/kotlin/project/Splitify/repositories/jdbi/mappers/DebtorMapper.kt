@@ -2,8 +2,8 @@ package project.splitify.repositories.jdbi.mappers
 
 import org.jdbi.v3.core.mapper.RowMapper
 import org.jdbi.v3.core.statement.StatementContext
-import project.splitify.http.userController.Debtor
-import project.splitify.http.userController.UserOutput
+import project.splitify.http.userController.userDTOS.Debtor
+import project.splitify.http.userController.userDTOS.UserOutput
 import java.sql.ResultSet
 
 class DebtorMapper : RowMapper<Debtor> {

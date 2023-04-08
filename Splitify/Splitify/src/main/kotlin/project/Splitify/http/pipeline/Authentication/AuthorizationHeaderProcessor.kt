@@ -3,7 +3,7 @@ package project.splitify.http.pipeline.authentication
 
 import org.springframework.stereotype.Component
 import project.splitify.domain.JWToken
-import project.splitify.http.userController.User
+import project.splitify.http.userController.userDTOS.User
 import project.splitify.services.UserServices
 import javax.servlet.http.Cookie
 

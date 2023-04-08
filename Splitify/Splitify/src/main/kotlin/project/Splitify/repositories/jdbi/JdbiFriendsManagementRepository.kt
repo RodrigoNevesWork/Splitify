@@ -2,8 +2,8 @@ package project.splitify.repositories.jdbi
 
 import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.kotlin.mapTo
-import project.splitify.http.userController.Friend
-import project.splitify.http.userController.FriendRequest
+import project.splitify.http.userController.userDTOS.Friend
+import project.splitify.http.userController.userDTOS.FriendRequest
 import project.splitify.repositories.FriendsManagementRepository
 
 class JdbiFriendsManagementRepository(

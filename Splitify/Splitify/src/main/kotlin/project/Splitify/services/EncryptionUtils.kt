@@ -1,8 +1,8 @@
 package project.splitify.services
 
 import org.springframework.stereotype.Component
-import project.splitify.http.userController.UserCreation
-import project.splitify.http.userController.UserOutput
+import project.splitify.http.userController.userDTOS.UserCreation
+import project.splitify.http.userController.userDTOS.UserOutput
 import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec

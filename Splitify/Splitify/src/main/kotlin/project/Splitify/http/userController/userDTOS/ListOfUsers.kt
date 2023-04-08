@@ -1,4 +1,4 @@
-package project.splitify.http.userController
+package project.splitify.http.userController.userDTOS
 
 data class ListOfUsers(val users : List<UserOutput>){
 

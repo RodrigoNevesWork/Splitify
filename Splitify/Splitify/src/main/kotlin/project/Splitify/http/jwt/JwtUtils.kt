@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import org.springframework.stereotype.Component
 import project.splitify.domain.JWToken
-import project.splitify.http.userController.UserCreation
+import project.splitify.http.userController.userDTOS.UserCreation
 import javax.crypto.spec.SecretKeySpec
 
 @Component
@@ -41,6 +41,5 @@ class JwtUtils(jwtConfiguration: JwtConfiguration) {
 
     companion object {
         private const val SECRET_KEY_ALGORITHM = "HmacSHA512"
-
     }
 }

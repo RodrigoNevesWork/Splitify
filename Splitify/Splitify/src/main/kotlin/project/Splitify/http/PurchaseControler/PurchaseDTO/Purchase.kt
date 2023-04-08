@@ -1,4 +1,4 @@
-package project.splitify.http.PurchaseControler
+package project.splitify.http.purchaseControler.purchaseDTO
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import java.time.LocalDate

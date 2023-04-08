@@ -1,7 +1,7 @@
 package project.splitify.repositories
 
-import project.splitify.http.userController.Friend
-import project.splitify.http.userController.FriendRequest
+import project.splitify.http.userController.userDTOS.Friend
+import project.splitify.http.userController.userDTOS.FriendRequest
 
 interface FriendsManagementRepository {
     fun createFriendRequest( id : String ,userID : Int, userRequesting : Int)

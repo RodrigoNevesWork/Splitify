@@ -1,6 +1,6 @@
-package project.splitify.http.userController
+package project.splitify.http.userController.userDTOS
 
-import project.splitify.http.PurchaseControler.Purchase
+import project.splitify.http.purchaseControler.purchaseDTO.Purchase
 
 /**
  * @param purchase -> the purchase that was made and the user has not paid

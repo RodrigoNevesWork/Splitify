@@ -2,10 +2,10 @@ package project.splitify.services
 
 import org.springframework.stereotype.Service
 import project.splitify.domain.*
-import project.splitify.http.userController.Decision
-import project.splitify.http.userController.Friend
-import project.splitify.http.userController.FriendRequest
-import project.splitify.http.userController.FriendRequestDecision
+import project.splitify.http.userController.userDTOS.Decision
+import project.splitify.http.userController.userDTOS.Friend
+import project.splitify.http.userController.userDTOS.FriendRequest
+import project.splitify.http.userController.userDTOS.FriendRequestDecision
 import project.splitify.repositories.TransactionManager
 import java.util.UUID
 

@@ -2,8 +2,8 @@ package project.splitify.services
 
 import org.springframework.stereotype.Service
 import project.splitify.domain.*
-import project.splitify.http.PurchaseControler.Purchase
-import project.splitify.http.PurchaseControler.PurchaseCreation
+import project.splitify.http.purchaseControler.purchaseDTO.Purchase
+import project.splitify.http.purchaseControler.purchaseDTO.PurchaseCreation
 import project.splitify.repositories.TransactionManager
 import java.time.LocalDate
 import java.util.*

@@ -14,6 +14,7 @@ import project.splitify.http.media.siren.SirenModel
 import project.splitify.http.media.siren.SirenModel.Companion.SIREN_MEDIA_TYPE
 import project.splitify.http.media.siren.SubEntity
 import project.splitify.http.pipeline.authentication.Authentication
+import project.splitify.http.userController.userDTOS.*
 import project.splitify.services.FriendManagementServices
 import project.splitify.services.UserServices
 import java.util.*

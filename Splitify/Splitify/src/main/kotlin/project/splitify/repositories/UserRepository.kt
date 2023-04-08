@@ -1,8 +1,8 @@
 package project.splitify.repositories
 
-import project.splitify.http.PurchaseControler.Purchase
-import project.splitify.http.tripController.Trips
-import project.splitify.http.userController.*
+import project.splitify.http.purchaseControler.purchaseDTO.Purchase
+import project.splitify.http.tripController.tripDTO.Trips
+import project.splitify.http.userController.userDTOS.*
 
 interface UserRepository {
 

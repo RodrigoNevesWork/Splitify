@@ -2,7 +2,7 @@ package project.splitify.repositories.jdbi
 
 import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.kotlin.mapTo
-import project.splitify.http.PurchaseControler.Purchase
+import project.splitify.http.purchaseControler.purchaseDTO.Purchase
 import project.splitify.repositories.PurchaseRepository
 
 class JdbiPurchaseRepository(

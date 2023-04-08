@@ -2,8 +2,8 @@ package project.splitify.http.tripController
 
 import org.springframework.web.bind.annotation.*
 import project.splitify.domain.*
-import project.splitify.http.userController.User
-import project.splitify.http.userController.UserInput
+import project.splitify.http.userController.userDTOS.User
+import project.splitify.http.userController.userDTOS.UserInput
 import project.splitify.http.media.Actions
 import project.splitify.http.media.Links
 import project.splitify.http.media.Problem.Companion.PROBLEM_MEDIA_TYPE
@@ -14,6 +14,8 @@ import project.splitify.http.pipeline.authentication.Authentication
 import project.splitify.services.TripServices
 import project.splitify.http.media.siren.SirenModel.Companion.SIREN_MEDIA_TYPE
 import project.splitify.http.media.siren.SubEntity
+import project.splitify.http.tripController.tripDTO.Trip
+import project.splitify.http.tripController.tripDTO.TripCreation
 
 @Authentication
 @RestController

@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
 import project.splitify.domain.Unauthorized
-import project.splitify.http.userController.User
+import project.splitify.http.userController.userDTOS.User
 import project.splitify.http.pipeline.UserArgumentResolver
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse

@@ -2,8 +2,8 @@ package project.splitify.services
 
 import org.springframework.stereotype.Service
 import project.splitify.domain.*
-import project.splitify.http.tripController.TripCreation
-import project.splitify.http.tripController.TripPurchases
+import project.splitify.http.tripController.tripDTO.TripCreation
+import project.splitify.http.tripController.tripDTO.TripPurchases
 import project.splitify.repositories.TransactionManager
 
 @Service
